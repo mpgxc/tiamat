@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  database:
+    image: postgres
+    container_name: boilerplate-db
+    restart: always
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: boilerplate-api
+    restart: always
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    volumes:
+      - ./src:/app/src
+    links:
+      - database
+    depends_on:
+      - database
+    command: yarn dev
+
+volumes:
+  pgdata:
+    driver: local
