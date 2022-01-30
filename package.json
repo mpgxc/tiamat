@@ -7,19 +7,24 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^3.2.1",
-    "prisma": "^3.2.1",
+    "bullmq": "^1.68.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "helmet": "^4.5.0",
     "husky": "^6.0.0",
+    "ioredis": "^4.28.3",
     "morgan": "^1.10.0",
-    "rimraf": "^3.0.2"
+    "nodemailer": "^6.7.2",
+    "prisma": "^3.2.1",
+    "rimraf": "^3.0.2",
+    "tsyringe": "^4.6.0"
   },
   "scripts": {
     "prepare": "husky install",
     "start": "npx prisma migrate dev; node build/server.js",
     "dev": "npx prisma migrate dev; tsnd -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "dev:queue": "tsnd -r tsconfig-paths/register --transpile-only --ignore-watch node_modules --respawn src/infra/queue/worker.ts",
     "lint": "eslint src --ext .ts --fix",
     "format": "prettier --write src/**/*.ts",
     "build": "rimraf build; babel src --extensions \".js,.ts\" --out-dir build --copy-files --no-copy-ignored"
@@ -40,8 +45,10 @@
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
     "@types/express": "^4.17.11",
+    "@types/ioredis": "^4.28.7",
     "@types/morgan": "^1.9.2",
     "@types/node": "^16.10.3",
+    "@types/nodemailer": "^6.4.4",
     "@types/typescript": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
