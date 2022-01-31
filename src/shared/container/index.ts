@@ -1,1 +1,1 @@
-import { container } from 'tsyringe';
+import '../../infra/queue';
