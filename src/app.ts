@@ -5,6 +5,9 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
+import 'reflect-metadata';
+import './shared/container';
+
 import { routes } from './routes';
 
 const app = express();
