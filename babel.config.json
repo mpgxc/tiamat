@@ -17,7 +17,14 @@
       "module-resolver",
       {
         "alias": {
-          "@infra": "./src/infra"
+          "@infra": "./src/infra",
+          "@application": "./src/application",
+          "@modules": "./src/modules",
+          "@domain": "./src/domain",
+          "@core": "./src/core",
+          "@shared": "./src/shared",
+          "@config": "./src/config",
+          "@presenter": "./src/presenter"
         }
       }
     ]
