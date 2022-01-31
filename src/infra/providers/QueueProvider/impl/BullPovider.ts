@@ -1,9 +1,28 @@
-import { Processor, Queue, QueueScheduler, Worker } from 'bullmq';
+import { Processor, Queue, Worker } from 'bullmq';
 
+import { redisConnection } from '../../../redis';
 import { IQueueProvider, Job, JobData } from '../IQueueProvider';
 
 class BullProvider implements IQueueProvider {
-  constructor(private queue: Queue) {}
+  private queue: Queue;
+
+  constructor(private queueName: string) {
+    this.queue = new Queue(queueName, {
+      connection: redisConnection,
+      defaultJobOptions: {
+        removeOnComplete: true,
+        attempts: 5,
+        backoff: {
+          type: 'exponential',
+          delay: 5000,
+        },
+      },
+    });
+  }
+
+  get instance(): Queue {
+    return this.queue;
+  }
 
   async add(job: JobData): Promise<void> {
     await this.queue.add('message', job);
@@ -18,10 +37,6 @@ class BullProvider implements IQueueProvider {
         duration: 1000,
       },
     });
-
-    // new QueueScheduler(this.queue.name, {
-    //   connection: this.queue.opts.connection,
-    // });
   }
 }
 
