@@ -5,13 +5,23 @@
     "lib": ["ESNext"],
     "module": "commonjs",
     "esModuleInterop": true,
+    "allowJs": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": "./",
+    "rootDir": "./",
+    "baseUrl": "./src",
+    "outDir": "./build",
     "paths": {
-      "*": ["*"]
+      "@application/*": ["application/*"],
+      "@modules/*": ["modules/*"],
+      "@domain/*": ["domain/*"],
+      "@core/*": ["core/*"],
+      "@infra/*": ["infra/*"],
+      "@shared/*": ["shared/*"],
+      "@config/*": ["config/*"],
+      "@presenter/*": ["presenter/*"]
     }
   }
 }
