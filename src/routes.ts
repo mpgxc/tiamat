@@ -1,11 +1,9 @@
 import { Router } from 'express';
 
+import { sendMessageController } from './application/SendMessage';
+
 const routes = Router();
 
-routes.get('/hello', (request, response) => {
-  return response.json({
-    message: 'Hello World!',
-  });
-});
+routes.post('/send-message', sendMessageController.handle);
 
 export { routes };
