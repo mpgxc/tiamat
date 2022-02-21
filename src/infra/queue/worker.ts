@@ -1,14 +1,13 @@
 import { QueueEvents } from 'bullmq';
 
-import { Message } from '../providers/MailProvider/IMailProvider';
-import { MailtrapMailProvider } from '../providers/MailProvider/impl/MailtrapMailProvider';
-import { BullProvider } from '../providers/QueueProvider/impl/BullPovider';
-import { Job } from '../providers/QueueProvider/IQueueProvider';
+import { Message } from '@infra/providers/mail/IMailProvider';
+import { MailtrapMailProvider } from '@infra/providers/mail/impl/MailtrapMailProvider';
+import { BullProvider } from '@infra/providers/queue/impl/BullQueuePovider';
 
 const workerQueue = new BullProvider('send-mailing');
 const mailer = new MailtrapMailProvider();
 
-workerQueue.process(async ({ data }: Job) => {
+workerQueue.process(async ({ data }) => {
   await mailer.sendMail(data as Message);
 });
 
