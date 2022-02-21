@@ -1,1 +1,1 @@
-import '../../infra/queue';
+import '@infra/queue';
