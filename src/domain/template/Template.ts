@@ -1,0 +1,3 @@
+class Template {}
+
+export { Template };
