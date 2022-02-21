@@ -1,19 +1,18 @@
-import { Request, Response } from 'express';
-import { container } from 'tsyringe';
+import { Controller } from '@shared/core/Controller';
+import { HttpRequest } from '@shared/http/HttpRequest';
+import { created, HttpResponse } from '@shared/http/HttpResponse';
 
 import { SendMessage } from './SendMessage';
 
-class SendMessageController {
-  async handle(request: Request, response: Response): Promise<Response> {
-    try {
-      const sendMessage = container.resolve(SendMessage);
+class SendMessageController extends Controller<HttpRequest, HttpResponse> {
+  constructor(private readonly sendMessage: SendMessage) {
+    super();
+  }
 
-      await sendMessage.run(request.body);
+  async handle(request: HttpRequest): Promise<HttpResponse> {
+    await this.sendMessage.execute(request.body);
 
-      return response.status(201).json({ message: 'ok!' });
-    } catch (error) {
-      return response.status(400).json({ message: 'fail!', error });
-    }
+    return created();
   }
 }
 
