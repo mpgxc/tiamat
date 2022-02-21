@@ -6,18 +6,20 @@ class MailtrapMailProvider implements IMailProvider {
   private transporter: Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 2525,
+    const mailerConfigs = {
+      host: String(process.env.SMTP_HOST),
+      port: Number(process.env.SMTP_PORT),
       auth: {
-        user: '23b948804781e6',
-        pass: '69231179939de4',
+        user: String(process.env.SMTP_AUTH_USER),
+        pass: String(process.env.SMTP_AUTH_PASS),
       },
-    });
+    };
+
+    this.transporter = nodemailer.createTransport(mailerConfigs);
   }
 
   async sendMail({ body, from, subject, to }: Message): Promise<void> {
-    await this.transporter.sendMail({
+    const mailParams = {
       to: {
         name: to.name,
         address: to.email,
@@ -29,7 +31,9 @@ class MailtrapMailProvider implements IMailProvider {
       subject,
       html: body,
       text: body,
-    });
+    };
+
+    await this.transporter.sendMail(mailParams);
   }
 }
 

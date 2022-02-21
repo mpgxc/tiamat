@@ -1,7 +1,8 @@
 import { Processor, Queue, Worker } from 'bullmq';
 
-import { redisConnection } from '../../../redis';
-import { IQueueProvider, Job, JobData } from '../IQueueProvider';
+import { redisConnection } from '@infra/redis';
+
+import { IQueueProvider, Job } from '../IQueueProvider';
 
 class BullProvider implements IQueueProvider {
   private queue: Queue;
@@ -24,19 +25,18 @@ class BullProvider implements IQueueProvider {
     return this.queue;
   }
 
-  async add(job: JobData): Promise<void> {
+  async add(job: Job): Promise<void> {
     await this.queue.add('message', job);
   }
 
-  async process(fn: (job: Job) => Promise<void>): Promise<void> {
-    new Worker(this.queue.name, fn as Processor, {
-      connection: this.queue.opts.connection,
+  async process(fn: (job: { data: Job }) => Promise<void>): Promise<void> {
+    const workerConfigs = {
       concurrency: 100,
-      limiter: {
-        max: 400,
-        duration: 1000,
-      },
-    });
+      connection: this.queue.opts.connection,
+      limiter: { max: 400, duration: 1000 },
+    };
+
+    new Worker(this.queue.name, fn as Processor, workerConfigs);
   }
 }
 
