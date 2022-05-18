@@ -1,11 +1,11 @@
 import { QueueEvents } from 'bullmq';
 
 import { Message } from '@infra/providers/mail/IMailProvider';
-import { MailtrapMailProvider } from '@infra/providers/mail/impl/MailtrapMailProvider';
+import { EtherealMailProvider } from '@infra/providers/mail/impl/EtherealMailProvider';
 import { BullProvider } from '@infra/providers/queue/impl/BullQueuePovider';
 
 const workerQueue = new BullProvider('send-mailing');
-const mailer = new MailtrapMailProvider();
+const mailer = new EtherealMailProvider();
 
 workerQueue.process(async ({ data }) => {
   await mailer.sendMail(data as Message);

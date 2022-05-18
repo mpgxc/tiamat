@@ -12,22 +12,30 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: development
-    container_name: boilerplate-api
-    restart: always
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: development
+  #   container_name: boilerplate-api
+  #   restart: always
+  #   ports:
+  #     - '${API_PORT}:${API_PORT}'
+  #   volumes:
+  #     - ./src:/app/src
+  #   links:
+  #     - database
+  #   depends_on:
+  #     - database
+  #     - redis
+  #   command: yarn dev
+
+  redis:
+    image: redis
+    command: redis-server --appendonly yes
+    hostname: redis
     ports:
-      - '${API_PORT}:${API_PORT}'
-    volumes:
-      - ./src:/app/src
-    links:
-      - database
-    depends_on:
-      - database
-    command: yarn dev
+      - "6379:6379"
 
 volumes:
   pgdata:
